@@ -2,6 +2,7 @@ const CHAIN = process.env.USE_CHAIN || 'BSC';
 const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
+const SNIPE_TOKEN_NAME = process.env.SNIPE_TOKEN_NAME;
 
 const SOCKETS = {
   BSC: process.env.MAINNET_WEBSOCKET_BSC,
@@ -17,6 +18,7 @@ const MAINNET_WEBSOCKET = SOCKETS[CHAIN];
 const MAINNET_API = API[CHAIN];
 
 console.log('🔥 RECIPIENT_ADDRESS: ', RECIPIENT_ADDRESS);
+console.log('🔥 SNIPE_TOKEN_NAME: ', SNIPE_TOKEN_NAME);
 console.log('🔥 CHAIN: ', CHAIN);
 console.log('🔥 SWAP: ', SWAP);
 
@@ -42,5 +44,6 @@ module.exports = {
   MAINNET_WEBSOCKET,
   RECIPIENT_ADDRESS,
   MNEMONIC,
-  MAINNET_API
+  MAINNET_API,
+  SNIPE_TOKEN_NAME
 };

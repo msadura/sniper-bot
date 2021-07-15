@@ -3,12 +3,13 @@ require('dotenv').config();
 
 const listenPairCreated = require('./functions/listenPairCreated');
 const { connectProvider } = require('./provider');
+const pairCreatedSnipeCb = require('./utils/pairCreatedSnipeCb');
 const { connectAccount } = require('./wallet');
 
 async function run() {
   const onConnect = () => {
     connectAccount();
-    listenPairCreated();
+    listenPairCreated(pairCreatedSnipeCb);
   };
 
   await connectProvider(onConnect);

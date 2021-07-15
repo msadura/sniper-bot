@@ -9,6 +9,7 @@
 MNEMONIC=ten sniper odmieni twoje marne zycie i staniesz sie bogata swinia gg
 USE_CHAIN=MATIC | BSC
 USE_SWAP=SUSHI | DFYN | PANCAKE
+SNIPE_TOKEN_NAME=Name of one of tokens from addresses to snipe
 
 MAINNET_WEBSOCKET_MATIC=MATIC WSS Address
 MAINNET_WEBSOCKET_BSC=BSC WSS Address
