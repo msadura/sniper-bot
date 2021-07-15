@@ -1,4 +1,6 @@
 require('dotenv').config();
+const { runApiServer } = require('./apiServer');
+const { USE_API_SERVER } = require('./constants');
 // const swapExactETHForTokens = require('./functions/swapExactETHForTokens');
 
 const listenPairCreated = require('./functions/listenPairCreated');
@@ -9,23 +11,16 @@ const { connectAccount } = require('./wallet');
 async function run() {
   const onConnect = () => {
     connectAccount();
+
+    // Remove pairCreatedSnipeCb if you do not want real purchase
     listenPairCreated(pairCreatedSnipeCb);
   };
 
   await connectProvider(onConnect);
 
-  console.log('🔥', 'Do stuff after account connecting');
-
-  // const resultTx = await swapExactETHForTokens({
-  //   amountIn: '0.1',
-  //   amountOut: '0.01',
-  //   token: addresses.SUSHI,
-  //   tokenName: '$SUSHI',
-  //   gwei: '3',
-  //   gasLimit: 161499
-  // });
-  // console.info('✅ bought', resultTx);
-  // listenPairCreated();
+  if (USE_API_SERVER) {
+    runApiServer();
+  }
 }
 
 run();

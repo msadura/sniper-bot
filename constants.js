@@ -3,6 +3,7 @@ const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const SNIPE_TOKEN_NAME = process.env.SNIPE_TOKEN_NAME;
+const USE_API_SERVER = process.env.USE_API_SERVER;
 
 const SOCKETS = {
   BSC: process.env.MAINNET_WEBSOCKET_BSC,
@@ -19,6 +20,7 @@ const MAINNET_API = API[CHAIN];
 
 console.log('🔥 RECIPIENT_ADDRESS: ', RECIPIENT_ADDRESS);
 console.log('🔥 SNIPE_TOKEN_NAME: ', SNIPE_TOKEN_NAME);
+console.log('🔥 USE_API_SERVER: ', USE_API_SERVER);
 console.log('🔥 CHAIN: ', CHAIN);
 console.log('🔥 SWAP: ', SWAP);
 
@@ -38,6 +40,10 @@ if (!MNEMONIC) {
   throw 'Set MNEMONIC env variable!';
 }
 
+if (!SNIPE_TOKEN_NAME) {
+  throw 'Set SNIPE_TOKEN_NAME env variable!';
+}
+
 module.exports = {
   CHAIN,
   SWAP,
@@ -45,5 +51,6 @@ module.exports = {
   RECIPIENT_ADDRESS,
   MNEMONIC,
   MAINNET_API,
-  SNIPE_TOKEN_NAME
+  SNIPE_TOKEN_NAME,
+  USE_API_SERVER
 };
