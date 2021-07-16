@@ -44,6 +44,11 @@ if (!SNIPE_TOKEN_NAME) {
   throw 'Set SNIPE_TOKEN_NAME env variable!';
 }
 
+const CHART_URLS = {
+  BSC: 'https://poocoin.app/tokens/',
+  MATIC: 'https://polygon.poocoin.app/tokens/'
+};
+
 module.exports = {
   CHAIN,
   SWAP,
@@ -52,5 +57,6 @@ module.exports = {
   MNEMONIC,
   MAINNET_API,
   SNIPE_TOKEN_NAME,
-  USE_API_SERVER
+  USE_API_SERVER,
+  CHART_URLS
 };

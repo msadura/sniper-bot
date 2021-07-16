@@ -9,7 +9,7 @@ const pairCreatedSnipeCb = require('./utils/pairCreatedSnipeCb');
 const { connectAccount } = require('./wallet');
 
 async function run() {
-  const onConnect = () => {
+  const onConnect = async () => {
     connectAccount();
 
     // Remove pairCreatedSnipeCb if you do not want real purchase
