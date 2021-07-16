@@ -2,10 +2,10 @@ const swapExactETHForTokens = require('../functions/swapExactETHForTokens');
 
 async function snipe(tokenAddress) {
   const resultTx = await swapExactETHForTokens({
-    amountIn: '0.1',
+    amountIn: '10',
     amountOut: '0',
     token: tokenAddress,
-    gwei: '3',
+    gwei: '5',
     gasLimit: 161499
   });
 
