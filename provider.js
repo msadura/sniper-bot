@@ -1,48 +1,55 @@
 const ethers = require('ethers');
-const { MAINNET_WEBSOCKET } = require('./constants');
+const { MAINNET_WEBSOCKET, MAINNET_API } = require('./constants');
 
-let provider = null;
-let connectingPromise = null;
-let connectingPromiseResolve = null;
+let wsProvider = null;
+let apiProvider = null;
+let retries = 0;
 
 const connectProvider = async onConnect => {
-  if (connectingPromise) {
-    return connectingPromise;
+  try {
+    if (MAINNET_API && !apiProvider) {
+      apiProvider = new ethers.providers.StaticJsonRpcProvider(MAINNET_API);
+      await apiProvider.ready;
+    }
+
+    wsProvider = new ethers.providers.WebSocketProvider(MAINNET_WEBSOCKET);
+    keepAlive({ onConnect });
+    await wsProvider.ready;
+    retries = 0;
+  } catch (e) {
+    console.log('Error while connecting to provider.');
+    console.log('🔥', e);
+
+    if (retries < 5) {
+      retries += 1;
+      console.log('🔥', 'Retrying connecting to provider');
+      connectProvider(onConnect);
+    }
   }
-
-  connectingPromise = new Promise(resolve => {
-    connectingPromiseResolve = resolve;
-  });
-
-  provider = new ethers.providers.WebSocketProvider(MAINNET_WEBSOCKET);
-  keepAlive({ onConnect });
-
-  return connectingPromise;
 };
 
 const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInterval = 7500 }) => {
   let pingTimeout = null;
   let keepAliveInterval = null;
 
-  provider._websocket.on('open', () => {
+  wsProvider._websocket.on('open', () => {
     console.log('🔥', 'Sockets connected.');
     onConnect && onConnect();
-    resolveConnection();
 
     keepAliveInterval = setInterval(() => {
-      provider._websocket.ping();
+      wsProvider._websocket.ping();
 
       // Use `WebSocket#terminate()`, which immediately destroys the connection,
       // instead of `WebSocket#close()`, which waits for the close timer.
       // Delay should be equal to the interval at which your server
       // sends out pings plus a conservative assumption of the latency.
       pingTimeout = setTimeout(() => {
-        provider._websocket.terminate();
+        wsProvider._websocket.terminate();
       }, expectedPongBack);
     }, checkInterval);
   });
 
-  provider._websocket.on('close', err => {
+  wsProvider._websocket.on('close', err => {
     console.log('🔥', 'Sockets disconnected, reconnecting...');
 
     if (keepAliveInterval) {
@@ -53,34 +60,43 @@ const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInt
       clearTimeout(pingTimeout);
     }
 
-    provider = null;
+    wsProvider = null;
     onDisconnect && onDisconnect(err);
     connectProvider(onConnect);
   });
 
-  provider._websocket.on('pong', () => {
+  wsProvider._websocket.on('pong', () => {
     if (pingTimeout) {
       clearInterval(pingTimeout);
     }
   });
 };
 
-function resolveConnection() {
-  if (connectingPromiseResolve) {
-    connectingPromiseResolve();
-    connectingPromiseResolve = null;
+const getHttpProvider = () => {
+  if (!apiProvider) {
+    console.log('🔥', 'Trying to use api provider that is not initialized!');
   }
 
-  if (connectingPromise) {
-    connectingPromise = null;
-  }
-}
+  return apiProvider;
+};
 
-const getProvider = () => {
-  if (!provider) {
-    console.log('🔥', 'Trying to use provider that is not connected!');
+const getWsProvider = () => {
+  if (!wsProvider) {
+    console.log('🔥', 'Trying to use wss provider that is not initialized!');
   }
-  return provider;
+
+  return wsProvider;
+};
+
+const getProvider = (useHttpApi = false) => {
+  if (useHttpApi) {
+    const apiProvider = getHttpProvider();
+    if (apiProvider) {
+      return apiProvider;
+    }
+  }
+
+  return getWsProvider();
 };
 
 module.exports = { getProvider, connectProvider };
