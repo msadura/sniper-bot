@@ -10,13 +10,13 @@ const SOCKETS = {
   MATIC: process.env.MAINNET_WEBSOCKET_MATIC
 };
 
-const API = {
-  BSC: process.env.MAINNET_API_BSC,
-  MATIC: process.env.MAINNET_API_MATIC
+const HTTP_API = {
+  BSC: process.env.MAINNET_HTTP_BSC,
+  MATIC: process.env.MAINNET_HTTP_MATIC
 };
 
 const MAINNET_WEBSOCKET = SOCKETS[CHAIN];
-const MAINNET_API = API[CHAIN];
+const MAINNET_API = HTTP_API[CHAIN];
 
 console.log('🔥 RECIPIENT_ADDRESS: ', RECIPIENT_ADDRESS);
 console.log('🔥 SNIPE_TOKEN_NAME: ', SNIPE_TOKEN_NAME);

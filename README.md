@@ -13,7 +13,10 @@ USE_API_SERVER=Whether to start or noto http api server
 SNIPE_TOKEN_NAME=Name of one of tokens from addresses to snipe
 
 MAINNET_WEBSOCKET_MATIC=MATIC WSS Address
+MAINNET_HTTP_MATIC=MATIC Http API Address
+
 MAINNET_WEBSOCKET_BSC=BSC WSS Address
+MAINNET_HTTP_BSC=BSC Http API Address
 
 RECIPIENT_ADDRESS=Address of recipient wallet
 ```
