@@ -3,9 +3,11 @@ const { runApiServer } = require('./apiServer');
 const { USE_API_SERVER } = require('./constants');
 // const swapExactETHForTokens = require('./functions/swapExactETHForTokens');
 
-const listenPairCreated = require('./functions/listenPairCreated');
+const listenPendingTx = require('./functions/listenPendingTx');
+const parseTransaction = require('./functions/parseTransaction');
 const { connectProvider } = require('./provider');
-const pairCreatedSnipeCb = require('./utils/pairCreatedSnipeCb');
+// const listenPairCreated = require('./functions/listenPairCreated');
+// const pairCreatedSnipeCb = require('./utils/pairCreatedSnipeCb');
 const { connectAccount } = require('./wallet');
 
 async function run() {
@@ -13,7 +15,8 @@ async function run() {
     connectAccount();
 
     // Remove pairCreatedSnipeCb if you do not want real purchase
-    listenPairCreated(pairCreatedSnipeCb);
+    // listenPairCreated(pairCreatedSnipeCb);
+    listenPendingTx(parseTransaction);
   };
 
   await connectProvider(onConnect);
