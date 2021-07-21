@@ -32,11 +32,11 @@ async function logCreatedPairAsync(token0, token1, pairAddress) {
   let linkToken0 = false;
   let linkToken1 = false;
 
-  if (!areAdressesEqual(token0, addresses.WETH)) {
+  if (!areAdressesEqual(token0, addresses.WETH_NATIVE)) {
     linkToken0 = true;
   }
 
-  if (!areAdressesEqual(token1, addresses.WETH)) {
+  if (!areAdressesEqual(token1, addresses.WETH_NATIVE)) {
     linkToken1 = true;
   }
 

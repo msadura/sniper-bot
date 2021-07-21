@@ -1,6 +1,5 @@
-const { getProvider } = require('../provider');
-
 const ethers = require('ethers');
+const { getProvider } = require('../provider');
 
 // The ERC-20 Contract ABI, which is a common contract interface
 // for tokens (this is the Human-Readable ABI format)
@@ -20,7 +19,7 @@ const abi = [
 ];
 
 function loadTokenInfo(address) {
-  return new ethers.Contract(address, abi, getProvider());
+  return new ethers.Contract(address, abi, getProvider(true));
 }
 
 async function getTokenSymbol(address) {
@@ -28,4 +27,14 @@ async function getTokenSymbol(address) {
   return await contract.symbol();
 }
 
-module.exports = { loadTokenInfo, getTokenSymbol };
+async function getTokenBalance(address, walletAddress) {
+  if (!walletAddress) {
+    console.warn('Trying to getTokenBalance without specified wallet addres!');
+    return;
+  }
+
+  const contract = loadTokenInfo(address);
+  return await contract.balanceOf(walletAddress);
+}
+
+module.exports = { loadTokenInfo, getTokenSymbol, getTokenBalance };

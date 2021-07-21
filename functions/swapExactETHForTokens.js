@@ -25,14 +25,14 @@ const swapExactETHForTokens = async ({
 }) => {
   const BNBAmount = ethers.utils.parseEther(amountIn).toHexString();
   const gasPrice = ethers.utils.parseUnits(gwei, 'gwei');
-  const path = [addresses.WETH];
-  if (token1 && !areAdressesEqual(token1, addresses.WETH)) {
+  const path = [addresses.WETH_NATIVE];
+  if (token1 && !areAdressesEqual(token1, addresses.WETH_NATIVE)) {
     path.push(token1);
   }
   path.push(token);
 
   const tx = await getRouter().swapExactETHForTokens(
-    ethers.utils.parseUnits(amountOut, 18), // Degen ape don't give a fuck about slippage, ethers.utils.parseUnits("0.26", 18)
+    ethers.utils.parseEther(amountOut), // Degen ape don't give a fuck about slippage, ethers.utils.parseUnits("0.26", 18)
     path,
     RECIPIENT_ADDRESS,
     Math.floor(Date.now() / 1000) + 60 * 2, // 2 minutes from now
