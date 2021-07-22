@@ -1,6 +1,6 @@
 const express = require('express');
 const addresses = require('./addresses');
-const { SNIPE_TOKEN_NAME } = require('./constants');
+const { SNIPE_TOKEN_NAMES } = require('./constants');
 const snipe = require('./utils/snipe');
 
 const app = express();
@@ -13,7 +13,9 @@ router.get('/', (req, res) => {
 
 router.get('/snipe', async (req, res) => {
   try {
-    const tokenName = req.query?.tokenName ? req.query.tokenName.toUpperCase() : SNIPE_TOKEN_NAME;
+    const tokenName = req.query?.tokenName
+      ? req.query.tokenName.toUpperCase()
+      : SNIPE_TOKEN_NAMES[0];
     const tokenAddress = addresses[tokenName];
     const resultTx = await snipe(tokenAddress);
     res.send(resultTx);

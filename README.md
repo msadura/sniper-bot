@@ -10,7 +10,7 @@ MNEMONIC=ten sniper odmieni twoje marne zycie i staniesz sie bogata swinia gg
 USE_CHAIN=MATIC | BSC
 USE_SWAP=SUSHI | DFYN | PANCAKE
 USE_API_SERVER=Whether to start or noto http api server
-SNIPE_TOKEN_NAME=Name of one of tokens from addresses to snipe
+SNIPE_TOKEN_NAMES=Names of tokens to snipe, divided by commas
 
 MAINNET_WEBSOCKET_MATIC=MATIC WSS Address
 MAINNET_HTTP_MATIC=MATIC Http API Address

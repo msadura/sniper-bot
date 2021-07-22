@@ -2,8 +2,13 @@ const CHAIN = process.env.USE_CHAIN || 'BSC';
 const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
-const SNIPE_TOKEN_NAME = process.env.SNIPE_TOKEN_NAME;
+let SNIPE_TOKEN_NAMES = [];
 const USE_API_SERVER = process.env.USE_API_SERVER;
+
+try {
+  SNIPE_TOKEN_NAMES = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
+  // eslint-disable-next-line no-empty
+} catch (e) {}
 
 const SOCKETS = {
   BSC: process.env.MAINNET_WEBSOCKET_BSC,
@@ -19,7 +24,7 @@ const MAINNET_WEBSOCKET = SOCKETS[CHAIN];
 const MAINNET_API = HTTP_API[CHAIN];
 
 console.log('🔥 RECIPIENT_ADDRESS: ', RECIPIENT_ADDRESS);
-console.log('🔥 SNIPE_TOKEN_NAME: ', SNIPE_TOKEN_NAME);
+console.log('🔥 SNIPE_TOKEN_NAMES: ', SNIPE_TOKEN_NAMES);
 console.log('🔥 USE_API_SERVER: ', USE_API_SERVER);
 console.log('🔥 CHAIN: ', CHAIN);
 console.log('🔥 SWAP: ', SWAP);
@@ -40,8 +45,8 @@ if (!MNEMONIC) {
   throw 'Set MNEMONIC env variable!';
 }
 
-if (!SNIPE_TOKEN_NAME) {
-  throw 'Set SNIPE_TOKEN_NAME env variable!';
+if (!SNIPE_TOKEN_NAMES || !SNIPE_TOKEN_NAMES.length) {
+  throw 'Set SNIPE_TOKEN_NAMES env variable!';
 }
 
 const CHART_URLS = {
@@ -56,7 +61,7 @@ module.exports = {
   RECIPIENT_ADDRESS,
   MNEMONIC,
   MAINNET_API,
-  SNIPE_TOKEN_NAME,
+  SNIPE_TOKEN_NAMES,
   USE_API_SERVER,
   CHART_URLS
 };
