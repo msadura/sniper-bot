@@ -3,7 +3,7 @@ const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
-const USE_ZERG_ARMY = true;
+const USE_ZERG_ARMY = false;
 const NATIVE_TOKEN_TRADE_AMOUNT = '1.0';
 
 let SNIPE_TOKEN_NAMES = [];
@@ -23,8 +23,14 @@ const HTTP_API = {
   MATIC: process.env.MAINNET_HTTP_MATIC
 };
 
+const NATIVE_TOKEN = {
+  BSC: 'BNB',
+  MATIC: 'MATIC'
+};
+
 const MAINNET_WEBSOCKET = SOCKETS[CHAIN];
 const MAINNET_API = HTTP_API[CHAIN];
+const NATIVE_TOKEN_SYMBOL = NATIVE_TOKEN[CHAIN];
 
 console.log('🔥 RECIPIENT_ADDRESS: ', RECIPIENT_ADDRESS);
 console.log('🔥 SNIPE_TOKEN_NAMES: ', SNIPE_TOKEN_NAMES);
@@ -68,5 +74,6 @@ module.exports = {
   USE_API_SERVER,
   CHART_URLS,
   USE_ZERG_ARMY,
-  NATIVE_TOKEN_TRADE_AMOUNT
+  NATIVE_TOKEN_TRADE_AMOUNT,
+  NATIVE_TOKEN_SYMBOL
 };

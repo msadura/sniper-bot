@@ -1,7 +1,5 @@
 const { ethers } = require('ethers');
-const addresses = require('../addresses');
 const { connectAndGetAccount, getAccount } = require('../wallet');
-const { getTokenBalance } = require('../functions/loadTokenInfo');
 const { NATIVE_TOKEN_TRADE_AMOUNT } = require('../constants');
 const getGasValue = require('../functions/getGasValue');
 
@@ -25,7 +23,7 @@ async function callToArms() {
     // TODO - make this async, so we don't need to wait for minions one by one
     try {
       const account = connectAndGetAccount(minion.mnemonic);
-      const isArmed = await isArmedAccount(account.address);
+      const isArmed = await isArmedAccount(account);
 
       if (!isArmed) {
         await armAccount(account.address);
@@ -39,8 +37,8 @@ async function callToArms() {
   }
 }
 
-async function isArmedAccount(address) {
-  const balance = await getTokenBalance(addresses.NATIVE_TOKEN, address);
+async function isArmedAccount(account) {
+  const balance = await account.getBalance();
   console.log('🔥 minion balance:', ethers.utils.formatEther(balance));
   const minBalance = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);
 
@@ -57,7 +55,7 @@ async function armAccount(address) {
 }
 
 async function disarmAccount(account) {
-  const balance = await getTokenBalance(addresses.NATIVE_TOKEN, account.address);
+  const balance = await account.getBalance();
   const gasValue = getGasValue();
   const returnBalance = balance.sub(gasValue);
 
