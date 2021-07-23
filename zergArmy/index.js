@@ -22,6 +22,7 @@ try {
 async function callToArms() {
   console.log('🔥', 'Preparing zerg army to fight...');
   for (const minion of minions) {
+    // TODO - make this async, so we don't need to wait for minions one by one
     try {
       const account = connectAndGetAccount(minion.mnemonic);
       const isArmed = await isArmedAccount(account.address);
@@ -49,6 +50,7 @@ async function isArmedAccount(address) {
 async function armAccount(address) {
   const tx = await getAccount(true).sendTransaction({
     to: address,
+    // TODO - calculate and add gasValue for buy transactions
     value: ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT)
   });
   await tx.wait();
@@ -56,11 +58,10 @@ async function armAccount(address) {
 
 async function disarmAccount(account) {
   const balance = await getTokenBalance(addresses.NATIVE_TOKEN, account.address);
-
   const gasValue = getGasValue();
   const returnBalance = balance.sub(gasValue);
 
-  if (balance.lte(ethers.BigNumber.from('0'))) {
+  if (returnBalance.lte(ethers.BigNumber.from('0'))) {
     console.log('🔥', 'no balance to get back');
     return;
   }
