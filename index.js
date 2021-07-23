@@ -9,7 +9,7 @@ const { connectProvider } = require('./provider');
 // const listenPairCreated = require('./functions/listenPairCreated');
 // const pairCreatedSnipeCb = require('./utils/pairCreatedSnipeCb');
 const { connectAccount } = require('./wallet');
-const { callToArms } = require('./zergArmy');
+const { callToArms, getFundsBack } = require('./zergArmy');
 const logNativeTokenBalance = require('./utils/logNativeTokenBalance');
 
 async function run() {
@@ -18,7 +18,8 @@ async function run() {
     if (USE_ZERG_ARMY) {
       await callToArms();
     }
-    // await getFundsBack();
+
+    await getFundsBack();
     logNativeTokenBalance();
 
     // Remove pairCreatedSnipeCb if you do not want real purchase

@@ -8,7 +8,7 @@ async function getGasValue(gasLimit = '21000', gasPrice) {
   }
 
   const limit = ethers.BigNumber.from(gasLimit);
-  const gasValue = gasPrice.mul(limit);
+  const gasValue = price.mul(limit);
 
   return gasValue;
 }
