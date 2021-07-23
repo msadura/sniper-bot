@@ -31,3 +31,6 @@ RECIPIENT_ADDRESS=Address of recipient wallet
 Bot will run in console showing new pairs added to pancake. WHen env variable `USE_API_SERVER` is set to true You can run `curl localhost:3002/snipe` to trigger your snipe.
 
 To configure your snipes check `index.js` and look for `snipe` calls.
+
+**Snipe with multiple accounts aka zerg army**
+To be written

@@ -1,6 +1,6 @@
 require('dotenv').config();
 const { runApiServer } = require('./apiServer');
-const { USE_API_SERVER } = require('./constants');
+const { USE_API_SERVER, USE_ZERG_ARMY } = require('./constants');
 // const swapExactETHForTokens = require('./functions/swapExactETHForTokens');
 
 const listenPendingTx = require('./functions/listenPendingTx');
@@ -14,7 +14,9 @@ const { callToArms } = require('./zergArmy');
 async function run() {
   const onConnect = async () => {
     connectAccount();
-    await callToArms();
+    if (USE_ZERG_ARMY) {
+      await callToArms();
+    }
     // await getFundsBack();
 
     // Remove pairCreatedSnipeCb if you do not want real purchase
