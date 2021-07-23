@@ -10,7 +10,7 @@ function generateMinions() {
     if (content) {
       console.error(
         '🔥',
-        'minions.json is not empty! If you are sure you want to override it, remove file manually.'
+        'minions.json is not empty! If youac are sure you want to override it, remove file manually.'
       );
       return;
     }

@@ -4,4 +4,4 @@ node_modules/
 build/
 .DS_Store
 
-snipeMinions/minions.json
+zergArmy/minions.json

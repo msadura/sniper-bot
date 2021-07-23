@@ -2,8 +2,11 @@ const CHAIN = process.env.USE_CHAIN || 'BSC';
 const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
-let SNIPE_TOKEN_NAMES = [];
 const USE_API_SERVER = process.env.USE_API_SERVER;
+const USE_ZERG_ARMY = true;
+const NATIVE_TOKEN_TRADE_AMOUNT = '1.0';
+
+let SNIPE_TOKEN_NAMES = [];
 
 try {
   SNIPE_TOKEN_NAMES = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
@@ -63,5 +66,7 @@ module.exports = {
   MAINNET_API,
   SNIPE_TOKEN_NAMES,
   USE_API_SERVER,
-  CHART_URLS
+  CHART_URLS,
+  USE_ZERG_ARMY,
+  NATIVE_TOKEN_TRADE_AMOUNT
 };

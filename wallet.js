@@ -26,4 +26,9 @@ function getAccount(useHttApi) {
   return account;
 }
 
-module.exports = { getAccount, connectAccount };
+function connectAndGetAccount(mnemonic, useHttpApi) {
+  const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+  return wallet.connect(getProvider(useHttpApi));
+}
+
+module.exports = { getAccount, connectAccount, connectAndGetAccount };

@@ -9,10 +9,13 @@ const { connectProvider } = require('./provider');
 // const listenPairCreated = require('./functions/listenPairCreated');
 // const pairCreatedSnipeCb = require('./utils/pairCreatedSnipeCb');
 const { connectAccount } = require('./wallet');
+const { callToArms } = require('./zergArmy');
 
 async function run() {
   const onConnect = async () => {
     connectAccount();
+    await callToArms();
+    // await getFundsBack();
 
     // Remove pairCreatedSnipeCb if you do not want real purchase
     // listenPairCreated(pairCreatedSnipeCb);

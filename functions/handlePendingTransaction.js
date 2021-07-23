@@ -1,9 +1,9 @@
 const handleAddLiquidity = require('./handleAddLiquidity');
 const handleAddLiquidityETH = require('./handleAddLiquidityETH');
 
-function handlePendingTransaction(tx) {
-  const addLiquidityData = handleAddLiquidity(tx);
-  const addLiquidityETHData = handleAddLiquidityETH(tx);
+async function handlePendingTransaction(tx) {
+  const addLiquidityData = await handleAddLiquidity(tx);
+  const addLiquidityETHData = await handleAddLiquidityETH(tx);
 
   if (addLiquidityData) {
     console.log('🔥', 'got add liquidity function');

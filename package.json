@@ -9,7 +9,7 @@
     "dev-no-watch": "node index --inspect",
     "start": "node index",
     "zip": "zip -r ./build/trader.zip . -x .env -x '*.git*' -x '*/.DS_Store/*' -x '*build*'",
-    "generateMinions": "node snipeMinions/generateMinions"
+    "generateMinions": "node zergArmy/generateMinions"
   },
   "author": "",
   "license": "ISC",
