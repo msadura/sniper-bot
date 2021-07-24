@@ -2,7 +2,7 @@ const { ethers } = require('ethers');
 const { connectAndGetAccount, getAccount } = require('../wallet');
 const { NATIVE_TOKEN_TRADE_AMOUNT } = require('../constants');
 const getGasValue = require('../functions/getGasValue');
-const snipe = require('../utils/snipe');
+const { snipe } = require('../utils/snipe');
 
 let minions = null;
 let loadingPromise = null;
@@ -22,7 +22,7 @@ try {
 }
 
 // Testing - use only 1 account
-minions = [minions[0]];
+minions = [minions[0], minions[1], minions[2]];
 
 function setLoadingPromise() {
   loadingPromise = new Promise((resolve, reject) => {
@@ -117,6 +117,7 @@ async function disarmMinion({ id, account }) {
     value: returnBalance
   });
   await tx.wait();
+  console.log('🔥', `Minion ${id} - funds returned`);
 }
 
 async function getFundsBack() {
@@ -128,14 +129,13 @@ async function getFundsBack() {
         minion.account = connectAndGetAccount(minion.mnemonic);
       }
       await disarmMinion(minion);
-      console.log('🔥', `Minion ${minion.id} - fundss returned`);
     } catch (e) {
       console.log('🔥', e);
       console.log('🔥', `Error getting funds from minion id ${minion.id}`);
     }
-
-    console.log('🔥', 'All funds returned from minions.');
   }
+
+  console.log('🔥', 'All funds returned from minions.');
 }
 
 async function snipeCommand(snipeData) {
@@ -158,6 +158,8 @@ async function snipeMinion(minion, snipeData) {
   const tx = await snipe({ ...snipeData, account: minion.account });
   if (tx) {
     console.info('✅', `Minion ${minion.id} sniped ${snipeData.tokenSymbol}! Tx: ${tx}`);
+    // await disarmMinion(minion);
+    // console.info('✅', `Minion ${minion.id} leftover funds returned`);
   } else {
     console.info('❌', `Minion ${minion.id} failed to snipe ${snipeData.tokenSymbol} :(`);
   }

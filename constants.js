@@ -3,21 +3,32 @@ const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
-const USE_ZERG_ARMY = true;
-const NATIVE_TOKEN_TRADE_AMOUNT = '1.0';
+const USE_ZERG_ARMY = false;
+const NATIVE_TOKEN_TRADE_AMOUNT = '0.1';
+
+// Snipe settings
 const SNIPE_GAS_LIMIT = 161499;
 const SNIPE_DEFAULT_GAS_PRICE = '2';
 
-// Add minOut amount if price is known
-const SNIPE_TOKENS_AMOUNT_OUT = {
-  DINO: '0',
-  ICE: '0'
+const SNIPE_TOKENS_CONFIG = {
+  DINO: {
+    amountOut: '0',
+    minLiq: null
+  },
+  ICE: {
+    minOut: '0',
+    minLiq: null
+  }
 };
 
+// Put names of trigger tokens here or in env variable
 let SNIPE_TOKEN_NAMES = [];
 
 try {
-  SNIPE_TOKEN_NAMES = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
+  const snipeTokensEnv = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
+  if (snipeTokensEnv.length) {
+    SNIPE_TOKEN_NAMES = snipeTokensEnv;
+  }
   // eslint-disable-next-line no-empty
 } catch (e) {}
 
@@ -63,7 +74,10 @@ if (!MNEMONIC) {
 }
 
 if (!SNIPE_TOKEN_NAMES || !SNIPE_TOKEN_NAMES.length) {
-  throw 'Set SNIPE_TOKEN_NAMES env variable!';
+  console.warn(
+    '⚠️',
+    ' Snipe token symbols not set. Liquidity sniping will not work, but you can snipe via api.'
+  );
 }
 
 const CHART_URLS = {
@@ -85,6 +99,6 @@ module.exports = {
   NATIVE_TOKEN_TRADE_AMOUNT,
   NATIVE_TOKEN_SYMBOL,
   SNIPE_GAS_LIMIT,
-  SNIPE_TOKENS_AMOUNT_OUT,
+  SNIPE_TOKENS_CONFIG,
   SNIPE_DEFAULT_GAS_PRICE
 };

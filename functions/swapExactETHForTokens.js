@@ -24,7 +24,10 @@ const swapExactETHForTokens = async ({
   gasPrice,
   gasLimit = null
 }) => {
-  const WETHAmount = ethers.utils.parseEther(amountIn).toHexString();
+  const WETHAmount = ethers.BigNumber.isBigNumber(amountIn)
+    ? amountIn.toHexString()
+    : ethers.utils.parseEther(amountIn).toHexString();
+
   const gasPriceGwei = ethers.utils.parseUnits(gasPrice, 'gwei');
   const path = [addresses.WETH_NATIVE];
   if (pairedToken && !areAdressesEqual(pairedToken, addresses.WETH_NATIVE)) {

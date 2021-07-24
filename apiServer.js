@@ -1,7 +1,7 @@
 const express = require('express');
 const addresses = require('./addresses');
-const { SNIPE_TOKEN_NAMES } = require('./constants');
-const { snipe } = require('./utils/snipe');
+const handleSnipeSignal = require('./utils/handleSnipeSignal');
+const { getFundsBack, callToArms } = require('./zergArmy');
 
 const app = express();
 const router = express.Router();
@@ -13,12 +13,37 @@ router.get('/', (req, res) => {
 
 router.get('/snipe', async (req, res) => {
   try {
-    const tokenName = req.query?.tokenName
-      ? req.query.tokenName.toUpperCase()
-      : SNIPE_TOKEN_NAMES[0];
-    const tokenAddress = addresses[tokenName];
-    const resultTx = await snipe(tokenAddress);
-    res.send(resultTx);
+    const tokenSymbol = req.query.tokenSymbol.toUpperCase();
+    const tokenAddress = addresses[tokenSymbol];
+
+    if (!tokenSymbol || !tokenAddress) {
+      throw 'Provide correct snipe token symbol in tokenSymbol query param!';
+    }
+
+    await handleSnipeSignal({ token: tokenAddress, tokenSymbol });
+    res.send('Snipe finished. Check console for results');
+    res.end();
+  } catch (e) {
+    res.send(e);
+    res.end();
+  }
+});
+
+router.get('/refund', async (req, res) => {
+  try {
+    await getFundsBack();
+    res.send('Funds from minions returned to main account');
+    res.end();
+  } catch (e) {
+    res.send(e);
+    res.end();
+  }
+});
+
+router.get('/cta', async (req, res) => {
+  try {
+    await callToArms();
+    res.send('Minions armed with snipe funds.');
     res.end();
   } catch (e) {
     res.send(e);
