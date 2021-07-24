@@ -1,6 +1,10 @@
 const { ethers } = require('ethers');
 const { connectAndGetAccount, getAccount } = require('../wallet');
-const { NATIVE_TOKEN_TRADE_AMOUNT } = require('../constants');
+const {
+  NATIVE_TOKEN_TRADE_AMOUNT,
+  SNIPE_DEFAULT_GAS_PRICE,
+  SNIPE_GAS_LIMIT
+} = require('../constants');
 const getGasValue = require('../functions/getGasValue');
 const { snipe } = require('../utils/snipe');
 
@@ -88,16 +92,22 @@ async function prepareMinion(minion) {
 async function isArmedMinion({ id, account }) {
   const balance = await account.getBalance();
   console.log(`🔥 minion ${id} balance:`, ethers.utils.formatEther(balance));
-  const minBalance = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);
+  const amountIn = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);
+  const approxGasValue = await getGasValue(SNIPE_GAS_LIMIT, SNIPE_DEFAULT_GAS_PRICE);
+  const minBalance = amountIn.add(approxGasValue);
 
   return balance.gte(minBalance);
 }
 
 async function armMinion({ account }) {
+  const amountIn = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);
+  const approxGasValue = await getGasValue(SNIPE_GAS_LIMIT, SNIPE_DEFAULT_GAS_PRICE);
+  const sendValue = amountIn.add(approxGasValue);
+  console.log('🔥', 'feeding with', ethers.utils.formatEther(sendValue));
+
   const tx = await getAccount(true).sendTransaction({
     to: account.address,
-    // TODO - calculate and add gasValue for buy transactions
-    value: ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT)
+    value: sendValue
   });
   await tx.wait();
 }
@@ -147,7 +157,9 @@ async function snipeCommand(snipeData) {
   setSnipingPromise();
 
   for (const minion of minions) {
-    snipeMinion(minion, snipeData);
+    if (minion.isArmed) {
+      snipeMinion(minion, snipeData);
+    }
   }
 
   return snipingPromise;

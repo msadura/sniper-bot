@@ -3,7 +3,7 @@ const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
-const USE_ZERG_ARMY = false;
+const USE_ZERG_ARMY = true;
 const NATIVE_TOKEN_TRADE_AMOUNT = '0.1';
 
 // Snipe settings
