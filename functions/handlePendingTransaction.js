@@ -1,3 +1,4 @@
+const handleSnipeSignal = require('../utils/handleSnipeSignal');
 const handleAddLiquidity = require('./handleAddLiquidity');
 const handleAddLiquidityETH = require('./handleAddLiquidityETH');
 
@@ -7,12 +8,12 @@ async function handlePendingTransaction(tx) {
 
   if (addLiquidityData) {
     console.log('🔥', 'got add liquidity function');
-    //TODO: run snipe logic
+    handleSnipeSignal(addLiquidityData);
   }
 
   if (addLiquidityETHData) {
     console.log('🔥', 'got add liquidity ETH function');
-    //TODO: run snipe logic
+    handleSnipeSignal(addLiquidityETHData);
   }
 }
 

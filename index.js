@@ -16,10 +16,10 @@ async function run() {
   const onConnect = async () => {
     connectAccount();
     if (USE_ZERG_ARMY) {
-      await callToArms();
+      // await callToArms();
     }
 
-    await getFundsBack();
+    // await getFundsBack();
     logNativeTokenBalance();
 
     // Remove pairCreatedSnipeCb if you do not want real purchase

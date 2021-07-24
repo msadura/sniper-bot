@@ -5,41 +5,42 @@ const areAdressesEqual = require('../utils/areAdressesEqual');
 const getTokenNameByAddress = require('../utils/getTokenNameByAddress');
 const { getAccount } = require('../wallet');
 
-const getRouter = () => {
+const getRouter = account => {
   return new ethers.Contract(
     addresses.router,
     [
       'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
     ],
-    getAccount(true)
+    account || getAccount(true)
   );
 };
 
 const swapExactETHForTokens = async ({
+  account,
   amountIn,
   amountOut,
   token,
-  token1,
-  gwei,
+  pairedToken,
+  gasPrice,
   gasLimit = null
 }) => {
-  const BNBAmount = ethers.utils.parseEther(amountIn).toHexString();
-  const gasPrice = ethers.utils.parseUnits(gwei, 'gwei');
+  const WETHAmount = ethers.utils.parseEther(amountIn).toHexString();
+  const gasPriceGwei = ethers.utils.parseUnits(gasPrice, 'gwei');
   const path = [addresses.WETH_NATIVE];
-  if (token1 && !areAdressesEqual(token1, addresses.WETH_NATIVE)) {
-    path.push(token1);
+  if (pairedToken && !areAdressesEqual(pairedToken, addresses.WETH_NATIVE)) {
+    path.push(pairedToken);
   }
   path.push(token);
 
-  const tx = await getRouter().swapExactETHForTokens(
-    ethers.utils.parseEther(amountOut), // Degen ape don't give a fuck about slippage, ethers.utils.parseUnits("0.26", 18)
+  const tx = await getRouter(account).swapExactETHForTokens(
+    ethers.utils.parseEther(amountOut),
     path,
     RECIPIENT_ADDRESS,
     Math.floor(Date.now() / 1000) + 60 * 2, // 2 minutes from now
     {
-      gasPrice,
+      gasPrice: gasPriceGwei,
       gasLimit,
-      value: BNBAmount
+      value: WETHAmount
     }
   );
   console.log(`🧲 Buying $${getTokenNameByAddress(token)} with $WETH native for platform`);

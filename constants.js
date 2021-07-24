@@ -5,6 +5,14 @@ const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
 const USE_ZERG_ARMY = true;
 const NATIVE_TOKEN_TRADE_AMOUNT = '1.0';
+const SNIPE_GAS_LIMIT = 161499;
+const SNIPE_DEFAULT_GAS_PRICE = '2';
+
+// Add minOut amount if price is known
+const SNIPE_TOKENS_AMOUNT_OUT = {
+  DINO: '0',
+  ICE: '0'
+};
 
 let SNIPE_TOKEN_NAMES = [];
 
@@ -75,5 +83,8 @@ module.exports = {
   CHART_URLS,
   USE_ZERG_ARMY,
   NATIVE_TOKEN_TRADE_AMOUNT,
-  NATIVE_TOKEN_SYMBOL
+  NATIVE_TOKEN_SYMBOL,
+  SNIPE_GAS_LIMIT,
+  SNIPE_TOKENS_AMOUNT_OUT,
+  SNIPE_DEFAULT_GAS_PRICE
 };

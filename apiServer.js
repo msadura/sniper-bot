@@ -1,7 +1,7 @@
 const express = require('express');
 const addresses = require('./addresses');
 const { SNIPE_TOKEN_NAMES } = require('./constants');
-const snipe = require('./utils/snipe');
+const { snipe } = require('./utils/snipe');
 
 const app = express();
 const router = express.Router();

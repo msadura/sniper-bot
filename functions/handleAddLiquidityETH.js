@@ -37,7 +37,7 @@ async function handleAddLiquidity(tx) {
 
     const isSignal = await isTradeSignal(tx, data);
 
-    return isSignal ? data : null;
+    return isSignal ? { ...data, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') } : null;
   } catch (e) {
     // this is not addLiquidity function
   }

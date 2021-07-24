@@ -43,9 +43,11 @@ async function handleAddLiquidity(tx) {
       deadline
     };
 
-    const isSignal = await isTradeSignal(tx, data);
+    const signalData = await getTradeSignalData(tx, data);
 
-    return isSignal ? data : null;
+    return signalData
+      ? { ...data, ...signalData, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') }
+      : null;
   } catch (e) {
     // this is not addLiquidity function
   }
@@ -53,19 +55,19 @@ async function handleAddLiquidity(tx) {
   return data;
 }
 
-async function isTradeSignal(tx, txData) {
+async function getTradeSignalData(tx, txData) {
   const snipeTokenAddresses = SNIPE_TOKEN_NAMES.map(n => addresses[n]);
   const { tokenA, tokenB, amountAMin, amountBMin } = txData;
 
   let isSnipeToken = false;
   let tokenAddress = tokenA;
-  let pairTokenAddress = tokenB;
+  let pairedTokenAddress = tokenB;
   let amountTokenMin = amountBMin;
   let amountPairTokenMin = amountAMin;
 
   if (snipeTokenAddresses.find(t => areAdressesEqual(tokenB, t))) {
     tokenAddress = tokenB;
-    pairTokenAddress = tokenA;
+    pairedTokenAddress = tokenA;
     amountTokenMin = amountBMin;
     amountPairTokenMin = amountAMin;
     isSnipeToken = true;
@@ -96,10 +98,15 @@ async function isTradeSignal(tx, txData) {
       amountTokenMin
     )} ${getTokenNameByAddress(tokenAddress)} - ${ethers.utils.formatEther(
       amountPairTokenMin
-    )} ${getTokenNameByAddress(pairTokenAddress)}`
+    )} ${getTokenNameByAddress(pairedTokenAddress)}`
   );
 
-  return true;
+  return {
+    tokenAddress,
+    tokenSymbol: getTokenNameByAddress(tokenAddress),
+    pairedTokenAddress,
+    pairedTokenSymbol: getTokenNameByAddress(pairedTokenAddress)
+  };
 }
 
 module.exports = handleAddLiquidity;
