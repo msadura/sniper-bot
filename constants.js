@@ -3,7 +3,7 @@ const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
-const USE_ZERG_ARMY = false;
+const USE_ZERG_ARMY = process.env.USE_ZERG_ARMY;
 
 const NATIVE_TOKENS_TRADE_AMOUNT = {
   BSC: '0.065', //BNB ~20$
