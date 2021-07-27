@@ -3,10 +3,10 @@ const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
-const USE_ZERG_ARMY = true;
+const USE_ZERG_ARMY = false;
 
 const NATIVE_TOKENS_TRADE_AMOUNT = {
-  BSC: '0.0003', //BNB
+  BSC: '0.065', //BNB ~20$
   MATIC: '0.1' //MATIC
 };
 
@@ -16,7 +16,7 @@ const DEFAULT_GAS_PRICES = {
 };
 
 // Snipe settings
-const SNIPE_GAS_LIMIT = 161499;
+const SNIPE_GAS_LIMIT = 768468;
 const DEFAULT_GAS_PRICE = DEFAULT_GAS_PRICES[CHAIN];
 
 const SNIPE_TOKENS_CONFIG = {
@@ -24,14 +24,13 @@ const SNIPE_TOKENS_CONFIG = {
     amountOut: '0',
     minLiq: null
   },
-  ICE: {
-    minOut: '0',
-    minLiq: null
+  LUCKYBDOGE: {
+    amountMin: '10000'
   }
 };
 
 // Put names of trigger tokens here or in env variable
-let SNIPE_TOKEN_NAMES = [];
+let SNIPE_TOKEN_NAMES = ['NETPLIX', 'PLYRS'];
 
 try {
   const snipeTokensEnv = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());

@@ -7,12 +7,12 @@ async function handlePendingTransaction(tx) {
   const addLiquidityETHData = await handleAddLiquidityETH(tx);
 
   if (addLiquidityData) {
-    console.log('🔥', 'got add liquidity function');
+    console.log('🟢 add liquidity data', addLiquidityData);
     handleSnipeSignal(addLiquidityData);
   }
 
   if (addLiquidityETHData) {
-    console.log('🔥', 'got add liquidity ETH function');
+    console.log('🟢 add liquidity ETH data', addLiquidityETHData);
     handleSnipeSignal(addLiquidityETHData);
   }
 }

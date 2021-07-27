@@ -3,7 +3,6 @@ const { connectAndGetAccount, getAccount } = require('../wallet');
 const { NATIVE_TOKEN_TRADE_AMOUNT, DEFAULT_GAS_PRICE, SNIPE_GAS_LIMIT } = require('../constants');
 const getGasValue = require('../functions/getGasValue');
 const { snipe } = require('../utils/snipe');
-const { getProvider } = require('../provider');
 
 let minions = null;
 let loadingPromise = null;
@@ -23,7 +22,7 @@ try {
 }
 
 // Testing - use only 1 account minions[1], minions[2]
-minions = [minions[0]];
+minions = [minions[0], minions[1]];
 
 function setLoadingPromise() {
   loadingPromise = new Promise((resolve, reject) => {

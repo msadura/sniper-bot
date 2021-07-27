@@ -1,7 +1,7 @@
 const { USE_ZERG_ARMY } = require('../constants');
 const { getAccount } = require('../wallet');
 const { snipeCommand } = require('../zergArmy');
-const snipe = require('./snipe');
+const { snipe } = require('./snipe');
 
 let snipeInProgress = false;
 
@@ -9,7 +9,6 @@ async function handleSnipeSignal(snipeData) {
   if (snipeInProgress) {
     return;
   }
-
   snipeInProgress = true;
 
   if (USE_ZERG_ARMY) {
@@ -18,7 +17,7 @@ async function handleSnipeSignal(snipeData) {
     return;
   }
 
-  await snipe({ snipeData, account: getAccount(true) });
+  await snipe({ ...snipeData, account: getAccount(true) });
   snipeInProgress = false;
 }
 
