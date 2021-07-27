@@ -1,12 +1,9 @@
 const { ethers } = require('ethers');
 const { connectAndGetAccount, getAccount } = require('../wallet');
-const {
-  NATIVE_TOKEN_TRADE_AMOUNT,
-  SNIPE_DEFAULT_GAS_PRICE,
-  SNIPE_GAS_LIMIT
-} = require('../constants');
+const { NATIVE_TOKEN_TRADE_AMOUNT, DEFAULT_GAS_PRICE, SNIPE_GAS_LIMIT } = require('../constants');
 const getGasValue = require('../functions/getGasValue');
 const { snipe } = require('../utils/snipe');
+const { getProvider } = require('../provider');
 
 let minions = null;
 let loadingPromise = null;
@@ -25,8 +22,8 @@ try {
   throw 'Cannot load minions data. Disable zerg army or provide correct minions file. Aborting.';
 }
 
-// Testing - use only 1 account
-minions = [minions[0], minions[1], minions[2]];
+// Testing - use only 1 account minions[1], minions[2]
+minions = [minions[0]];
 
 function setLoadingPromise() {
   loadingPromise = new Promise((resolve, reject) => {
@@ -66,7 +63,7 @@ async function prepareMinion(minion) {
   }
 
   try {
-    minion.account = connectAndGetAccount(minion.mnemonic);
+    minion.account = connectAndGetAccount(minion.mnemonic, true);
     const isArmed = await isArmedMinion(minion);
 
     if (!isArmed) {
@@ -93,7 +90,7 @@ async function isArmedMinion({ id, account }) {
   const balance = await account.getBalance();
   console.log(`🔥 minion ${id} balance:`, ethers.utils.formatEther(balance));
   const amountIn = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);
-  const approxGasValue = await getGasValue(SNIPE_GAS_LIMIT, SNIPE_DEFAULT_GAS_PRICE);
+  const { gasValue: approxGasValue } = await getGasValue(SNIPE_GAS_LIMIT, DEFAULT_GAS_PRICE);
   const minBalance = amountIn.add(approxGasValue);
 
   return balance.gte(minBalance);
@@ -101,20 +98,26 @@ async function isArmedMinion({ id, account }) {
 
 async function armMinion({ account }) {
   const amountIn = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);
-  const approxGasValue = await getGasValue(SNIPE_GAS_LIMIT, SNIPE_DEFAULT_GAS_PRICE);
+  const {
+    gasValue: approxGasValue,
+    gasPrice,
+    gasLimit
+  } = await getGasValue(SNIPE_GAS_LIMIT, DEFAULT_GAS_PRICE);
   const sendValue = amountIn.add(approxGasValue);
   console.log('🔥', 'feeding with', ethers.utils.formatEther(sendValue));
 
   const tx = await getAccount(true).sendTransaction({
     to: account.address,
-    value: sendValue
+    value: sendValue,
+    gasPrice,
+    gasLimit
   });
   await tx.wait();
 }
 
 async function disarmMinion({ id, account }) {
   const balance = await account.getBalance();
-  const gasValue = await getGasValue();
+  const { gasValue, gasPrice, gasLimit } = await getGasValue(21000, DEFAULT_GAS_PRICE);
   const returnBalance = balance.sub(gasValue);
 
   if (returnBalance.lte(ethers.BigNumber.from('0'))) {
@@ -124,7 +127,9 @@ async function disarmMinion({ id, account }) {
 
   const tx = await account.sendTransaction({
     to: getAccount(true).address,
-    value: returnBalance
+    value: returnBalance,
+    gasPrice,
+    gasLimit
   });
   await tx.wait();
   console.log('🔥', `Minion ${id} - funds returned`);
@@ -136,7 +141,7 @@ async function getFundsBack() {
   for (const minion of minions) {
     try {
       if (!minion.account) {
-        minion.account = connectAndGetAccount(minion.mnemonic);
+        minion.account = connectAndGetAccount(minion.mnemonic, true);
       }
       await disarmMinion(minion);
     } catch (e) {
@@ -146,6 +151,24 @@ async function getFundsBack() {
   }
 
   console.log('🔥', 'All funds returned from minions.');
+}
+
+async function logBalances() {
+  for (const minion of minions) {
+    try {
+      if (!minion.account) {
+        minion.account = connectAndGetAccount(minion.mnemonic, true);
+      }
+      const armed = await isArmedMinion(minion);
+      console.log(
+        '🔥',
+        `Minion ${minion.id} isArmed - ${armed}, address: ${minion.account.address}`
+      );
+    } catch (e) {
+      console.log('🔥', e);
+      console.log('🔥', `Error getting balance from minion id ${minion.id}`);
+    }
+  }
 }
 
 async function snipeCommand(snipeData) {
@@ -203,4 +226,4 @@ function checkSnipingState() {
   clearSnipingPromise();
 }
 
-module.exports = { callToArms, getFundsBack, snipeCommand };
+module.exports = { callToArms, getFundsBack, snipeCommand, logBalances };

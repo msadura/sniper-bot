@@ -2,7 +2,7 @@ const { ethers } = require('ethers');
 const {
   SNIPE_GAS_LIMIT,
   NATIVE_TOKEN_TRADE_AMOUNT,
-  SNIPE_DEFAULT_GAS_PRICE,
+  DEFAULT_GAS_PRICE,
   SNIPE_TOKENS_CONFIG
 } = require('../constants');
 const getGasValue = require('../functions/getGasValue');
@@ -17,7 +17,7 @@ async function snipe({ account, ...params }) {
     isRetry,
     amountIn: amountInParam,
     gasLimit = SNIPE_GAS_LIMIT,
-    gasPrice = SNIPE_DEFAULT_GAS_PRICE
+    gasPrice = DEFAULT_GAS_PRICE
   } = params;
   try {
     if (!isRetry) {
@@ -32,7 +32,7 @@ async function snipe({ account, ...params }) {
     if (!isRetry) {
       console.log('🔫', 'Snipe shot params:', {
         ...params,
-        amountIn,
+        amountIn: ethers.utils.formatEther(amountIn),
         amountOut,
         gasLimit,
         gasPrice
@@ -55,7 +55,7 @@ async function snipe({ account, ...params }) {
     if (retries < 4) {
       console.log('🔥', 'Retrying snipe purchase');
       retries += 1;
-      const retryParams = { ...params, isRetry: true };
+      const retryParams = { ...params, account, isRetry: true };
       return snipe(retryParams);
     } else {
       console.log('🔥', `Could not purchase token ${token}`);
@@ -65,7 +65,7 @@ async function snipe({ account, ...params }) {
 }
 
 async function calculateSnipeAmountIn({ gasPrice, account }) {
-  const gasValue = await getGasValue(SNIPE_GAS_LIMIT, gasPrice);
+  const { gasValue } = await getGasValue(SNIPE_GAS_LIMIT, gasPrice);
   const balance = await account.getBalance();
   const availableBalance = balance.sub(gasValue);
   let amountIn = ethers.utils.parseEther(NATIVE_TOKEN_TRADE_AMOUNT);

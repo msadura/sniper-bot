@@ -1,7 +1,7 @@
 const express = require('express');
 const addresses = require('./addresses');
 const handleSnipeSignal = require('./utils/handleSnipeSignal');
-const { getFundsBack, callToArms } = require('./zergArmy');
+const { getFundsBack, callToArms, logBalances } = require('./zergArmy');
 
 const app = express();
 const router = express.Router();
@@ -33,6 +33,17 @@ router.get('/refund', async (req, res) => {
   try {
     await getFundsBack();
     res.send('Funds from minions returned to main account');
+    res.end();
+  } catch (e) {
+    res.send(e);
+    res.end();
+  }
+});
+
+router.get('/balance', async (req, res) => {
+  try {
+    await logBalances();
+    res.send('Done.');
     res.end();
   } catch (e) {
     res.send(e);

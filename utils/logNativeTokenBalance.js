@@ -7,7 +7,7 @@ async function logNativeTokenBalance() {
 
   console.log(
     '💰',
-    `Native token banace on main account: ${ethers.utils.formatEther(
+    `Native token balance on main account: ${ethers.utils.formatEther(
       balance
     )} ${NATIVE_TOKEN_SYMBOL}`
   );
