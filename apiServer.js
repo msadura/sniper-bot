@@ -65,7 +65,7 @@ router.get('/cta', async (req, res) => {
 app.use('/', router);
 
 function runApiServer() {
-  app.listen(3002);
+  app.listen(process.env.PROD ? 8081 : 3002);
   console.log('🔥', 'Api server listens on port 3002');
 }
 
