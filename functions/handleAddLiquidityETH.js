@@ -35,6 +35,7 @@ async function handleAddLiquidity(tx) {
       deadline
     };
 
+    console.log('🔥 addLiquidityETH data', data);
     const isSignal = await isTradeSignal(tx, data);
 
     return isSignal ? { ...data, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') } : null;

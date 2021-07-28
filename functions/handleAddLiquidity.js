@@ -8,6 +8,9 @@ const { getTokenBalance } = require('./loadTokenInfo');
 const abi = [
   'function addLiquidity(address tokenA, address tokenB, uint amountADesired, uint amountBDesired, uint amountAMin, uint amountBMin, address to, uint deadline ) external returns (uint amountA, uint amountB, uint liquidity)'
 ];
+// const abi2 = [
+//   'function addLiquidity(address tokenA, address tokenB, uint amountADesired, uint amountBDesired, uint amountAMin, uint amountBMin, address to, uint deadline ) external returns (uint amountA, uint amountB, uint liquidity)'
+// ];
 const iface = new ethers.utils.Interface(abi);
 
 async function handleAddLiquidity(tx) {
@@ -15,7 +18,7 @@ async function handleAddLiquidity(tx) {
 
   try {
     const txData = iface.parseTransaction(tx);
-    // console.log('🔥', txData.args.tokenA);
+
     const { tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin, to, deadline } =
       txData.args;
 
@@ -44,7 +47,7 @@ async function handleAddLiquidity(tx) {
     };
 
     const signalData = await getTradeSignalData(tx, data);
-
+    console.log('🔥 addLiquidity data', data);
     return signalData
       ? { ...data, ...signalData, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') }
       : null;
