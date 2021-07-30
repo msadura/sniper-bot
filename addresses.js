@@ -13,7 +13,7 @@ const DEFAULT_ADDRESSES = {
   CAKE: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
   NETPLIX: '0x00daa36cf9b04a369eca3c2d382d04fb7c7f44ac',
   SAFEDINO: '',
-  CUPCAKE: ''
+  CUPCAKE: 'CUPCAKE'
 };
 
 const MATIC_DEFAULTS = {
