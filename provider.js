@@ -1,8 +1,15 @@
 const ethers = require('ethers');
-const { MAINNET_WEBSOCKET, MAINNET_API, MAINNET_PASS, MAINNET_USER } = require('./constants');
+const {
+  MAINNET_WEBSOCKET,
+  MAINNET_API,
+  MAINNET_PASS,
+  MAINNET_USER,
+  MAINNET_API_PUBLIC
+} = require('./constants');
 
 let wsProvider = null;
 let apiProvider = null;
+let apiPublicProvider = null;
 let retries = 0;
 
 const connectProvider = async onConnect => {
@@ -20,9 +27,17 @@ const connectProvider = async onConnect => {
 
       apiProvider = new ethers.providers.StaticJsonRpcProvider(apiConnectInfo);
       await apiProvider.ready;
+      console.log('🔥 Http provider info:', apiConnectInfo);
+
+      if (MAINNET_API_PUBLIC) {
+        apiPublicProvider = new ethers.providers.StaticJsonRpcProvider(MAINNET_API_PUBLIC);
+        console.log('🔥 Public http provider info:', MAINNET_API_PUBLIC);
+        await apiPublicProvider.ready;
+      }
     }
 
     wsProvider = new ethers.providers.WebSocketProvider(MAINNET_WEBSOCKET);
+    console.log('🔥 Ws provider info:', MAINNET_WEBSOCKET);
     keepAlive({ onConnect });
     await wsProvider.ready;
     retries = 0;
@@ -90,6 +105,15 @@ const getHttpProvider = () => {
   return apiProvider;
 };
 
+const getPublicHttpProvider = () => {
+  if (!apiPublicProvider) {
+    console.log('🔥', 'Trying to use public api provider that is not initialized!');
+    return getHttpProvider();
+  }
+
+  return apiPublicProvider;
+};
+
 const getWsProvider = () => {
   if (!wsProvider) {
     console.log('🔥', 'Trying to use wss provider that is not initialized!');
@@ -98,8 +122,15 @@ const getWsProvider = () => {
   return wsProvider;
 };
 
-const getProvider = (useHttpApi = false) => {
-  if (useHttpApi) {
+const getProvider = (connectionType = 'wss') => {
+  if (connectionType === 'public') {
+    const apiProvider = getPublicHttpProvider();
+    if (apiProvider) {
+      return apiProvider;
+    }
+  }
+
+  if (connectionType === 'http') {
     const apiProvider = getHttpProvider();
     if (apiProvider) {
       return apiProvider;

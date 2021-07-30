@@ -30,7 +30,7 @@ const SNIPE_TOKENS_CONFIG = {
 };
 
 // Put names of trigger tokens here or in env variable
-let SNIPE_TOKEN_NAMES = ['NETPLIX', 'BDOGE'];
+let SNIPE_TOKEN_NAMES = ['NETPLIX'];
 
 try {
   const snipeTokensEnv = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
@@ -47,6 +47,7 @@ const NATIVE_TOKEN = {
 
 const MAINNET_WEBSOCKET = process.env[`MAINNET_WEBSOCKET_${CHAIN}`];
 const MAINNET_API = process.env[`MAINNET_HTTP_${CHAIN}`];
+const MAINNET_API_PUBLIC = process.env[`MAINNET_HTTP_PUBLIC_${CHAIN}`];
 const MAINNET_USER = process.env[`MAINNET_USER_${CHAIN}`];
 const MAINNET_PASS = process.env[`MAINNET_PASS_${CHAIN}`];
 const NATIVE_TOKEN_SYMBOL = NATIVE_TOKEN[CHAIN];
@@ -103,5 +104,6 @@ module.exports = {
   SNIPE_TOKENS_CONFIG,
   DEFAULT_GAS_PRICE,
   MAINNET_USER,
-  MAINNET_PASS
+  MAINNET_PASS,
+  MAINNET_API_PUBLIC
 };

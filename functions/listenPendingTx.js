@@ -1,21 +1,24 @@
 const { getProvider } = require('../provider');
 
-// let good = 0;
-// let bad = 0;
+let good = 0;
+let bad = 0;
+
+const usePublicApiForDetails = process.env.USE_PUBLIC_API;
 
 function listenPendingTx(callback) {
   console.log('🔫   -->   Listening pending tx');
-  const provider = getProvider();
-  provider.on('pending', async tx => {
-    const transaction = await provider.getTransaction(tx);
+  getProvider('ws').on('pending', async tx => {
+    const transaction = await getProvider(
+      usePublicApiForDetails ? 'public' : 'http'
+    ).getTransaction(tx);
 
-    // if (!transaction) {
-    //   bad++;
-    //   console.log('🔥', 'good tx', good, 'null tx', bad);
-    // } else {
-    //   good++;
-    //   console.log('🔫', 'good tx', good, 'null tx', bad);
-    // }
+    if (!transaction) {
+      bad++;
+      console.log('🔥', 'good tx', good, 'null tx', bad);
+    } else {
+      good++;
+      console.log('🔫', 'good tx', good, 'null tx', bad);
+    }
 
     callback && callback(transaction);
   });

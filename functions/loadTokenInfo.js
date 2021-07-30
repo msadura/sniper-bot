@@ -20,7 +20,7 @@ const abi = [
 ];
 
 function loadTokenInfo(address) {
-  return new ethers.Contract(address, abi, getProvider(true));
+  return new ethers.Contract(address, abi, getProvider('http'));
 }
 
 async function getTokenSymbol(address) {
