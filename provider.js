@@ -1,5 +1,5 @@
 const ethers = require('ethers');
-const { MAINNET_WEBSOCKET, MAINNET_API } = require('./constants');
+const { MAINNET_WEBSOCKET, MAINNET_API, MAINNET_PASS, MAINNET_USER } = require('./constants');
 
 let wsProvider = null;
 let apiProvider = null;
@@ -8,7 +8,17 @@ let retries = 0;
 const connectProvider = async onConnect => {
   try {
     if (MAINNET_API && !apiProvider) {
-      apiProvider = new ethers.providers.StaticJsonRpcProvider(MAINNET_API);
+      let apiConnectInfo = MAINNET_API;
+
+      if (MAINNET_PASS && MAINNET_USER) {
+        apiConnectInfo = {
+          url: MAINNET_API,
+          user: MAINNET_USER,
+          password: MAINNET_PASS
+        };
+      }
+
+      apiProvider = new ethers.providers.StaticJsonRpcProvider(apiConnectInfo);
       await apiProvider.ready;
     }
 
