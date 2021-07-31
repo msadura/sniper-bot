@@ -1,7 +1,7 @@
 const { getProvider } = require('../provider');
 
-let good = 0;
-let bad = 0;
+// let good = 0;
+// let bad = 0;
 
 const usePublicApiForDetails = process.env.USE_PUBLIC_API;
 
@@ -12,13 +12,13 @@ function listenPendingTx(callback) {
       usePublicApiForDetails ? 'public' : 'http'
     ).getTransaction(tx);
 
-    if (!transaction) {
-      bad++;
-      console.log('🔥', 'good tx', good, 'null tx', bad);
-    } else {
-      good++;
-      console.log('🔫', 'good tx', good, 'null tx', bad);
-    }
+    // if (!transaction) {
+    //   bad++;
+    //   console.log('🔥', 'good tx', good, 'null tx', bad);
+    // } else {
+    //   good++;
+    //   console.log('🔫', 'good tx', good, 'null tx', bad);
+    // }
 
     callback && callback(transaction);
   });
