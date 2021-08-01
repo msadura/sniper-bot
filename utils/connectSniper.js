@@ -19,7 +19,7 @@ async function connectSniper() {
     // listenPairCreated(pairCreatedSnipeCb);
     listenPendingTx(handlePendingTransaction);
   };
-  console.log('🔥 oc', onConnect);
+
   await connectProvider(onConnect);
 }
 
