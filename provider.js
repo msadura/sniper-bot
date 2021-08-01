@@ -11,9 +11,12 @@ let wsProvider = null;
 let apiProvider = null;
 let apiPublicProvider = null;
 let retries = 0;
+let autoReconnect = true;
 
 const connectProvider = async onConnect => {
   try {
+    autoReconnect = true;
+
     if (MAINNET_API && !apiProvider) {
       let apiConnectInfo = MAINNET_API;
 
@@ -59,6 +62,7 @@ const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInt
 
   wsProvider._websocket.on('open', () => {
     console.log('🔥', 'Sockets connected.');
+    console.log('🔥', onConnect);
     onConnect && onConnect();
 
     keepAliveInterval = setInterval(() => {
@@ -75,8 +79,6 @@ const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInt
   });
 
   wsProvider._websocket.on('close', err => {
-    console.log('🔥', 'Sockets disconnected, reconnecting...');
-
     if (keepAliveInterval) {
       clearInterval(keepAliveInterval);
     }
@@ -87,7 +89,11 @@ const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInt
 
     wsProvider = null;
     onDisconnect && onDisconnect(err);
-    connectProvider(onConnect);
+
+    if (autoReconnect) {
+      console.log('🔥', 'Sockets disconnected, reconnecting...');
+      connectProvider(onConnect);
+    }
   });
 
   wsProvider._websocket.on('pong', () => {
@@ -95,6 +101,15 @@ const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInt
       clearInterval(pingTimeout);
     }
   });
+};
+
+const disconnectSockets = () => {
+  console.log('🔥', 'Manually shutting down sockets.');
+  autoReconnect = false;
+  try {
+    wsProvider._websocket.terminate();
+    // eslint-disable-next-line no-empty
+  } catch (e) {}
 };
 
 const getHttpProvider = () => {
@@ -140,4 +155,4 @@ const getProvider = (connectionType = 'wss') => {
   return getWsProvider();
 };
 
-module.exports = { getProvider, connectProvider };
+module.exports = { getProvider, connectProvider, disconnectSockets };

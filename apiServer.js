@@ -1,5 +1,7 @@
 const express = require('express');
 const addresses = require('./addresses');
+const { disconnectSockets } = require('./provider');
+const connectSniper = require('./utils/connectSniper');
 const handleSnipeSignal = require('./utils/handleSnipeSignal');
 const { getFundsBack, callToArms, logBalances } = require('./zergArmy');
 
@@ -55,6 +57,28 @@ router.get('/cta', async (req, res) => {
   try {
     await callToArms();
     res.send('Minions armed with snipe funds.');
+    res.end();
+  } catch (e) {
+    res.send(e);
+    res.end();
+  }
+});
+
+router.get('/on', async (req, res) => {
+  try {
+    await connectSniper();
+    res.send('Sniper turned on.');
+    res.end();
+  } catch (e) {
+    res.send(e);
+    res.end();
+  }
+});
+
+router.get('/off', async (req, res) => {
+  try {
+    await disconnectSockets();
+    res.send('Sniper turned off.');
     res.end();
   } catch (e) {
     res.send(e);
