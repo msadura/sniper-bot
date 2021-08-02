@@ -62,7 +62,6 @@ const keepAlive = ({ onDisconnect, onConnect, expectedPongBack = 15000, checkInt
 
   wsProvider._websocket.on('open', () => {
     console.log('🔥', 'Sockets connected.');
-    console.log('🔥', onConnect);
     onConnect && onConnect();
 
     keepAliveInterval = setInterval(() => {

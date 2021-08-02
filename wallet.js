@@ -6,12 +6,11 @@ let account = null;
 let httpAccount = null;
 
 function connectAccount() {
-  const provider = getProvider('ws');
   const wallet = ethers.Wallet.fromMnemonic(MNEMONIC);
   console.info('connecting accout...');
 
   try {
-    account = wallet.connect(provider);
+    account = wallet.connect(getProvider('ws'));
     httpAccount = wallet.connect(getProvider('http'));
   } catch (e) {
     console.log('🔥 account connect error', e);
