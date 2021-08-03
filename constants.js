@@ -30,7 +30,7 @@ const SNIPE_TOKENS_CONFIG = {
 };
 
 // Put names of trigger tokens here or in env variable
-let SNIPE_TOKEN_NAMES = ['NETPLIX', 'MDCH'];
+let SNIPE_TOKEN_NAMES = ['PUPPY', 'MDCH'];
 
 try {
   const snipeTokensEnv = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
