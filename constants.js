@@ -7,7 +7,7 @@ const USE_ZERG_ARMY = process.env.USE_ZERG_ARMY;
 
 const NATIVE_TOKENS_TRADE_AMOUNT = {
   BSC: '0.065', //BNB ~20$
-  MATIC: '0.5' //MATIC
+  MATIC: '50' //MATIC
 };
 
 const DEFAULT_GAS_PRICES = {
@@ -30,7 +30,7 @@ const SNIPE_TOKENS_CONFIG = {
 };
 
 // Put names of trigger tokens here or in env variable
-let SNIPE_TOKEN_NAMES = ['PUPPY', 'MDCH'];
+let SNIPE_TOKEN_NAMES = ['PUPPY', 'MDCH', 'BALL', 'POLY', 'MNOP'];
 
 try {
   const snipeTokensEnv = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
