@@ -11,6 +11,7 @@ const swapExactETHForTokens = require('../functions/swapExactETHForTokens');
 let retries = 0;
 async function snipe({ account, ...params }) {
   const {
+    to,
     token,
     tokenSymbol,
     pairedToken,
@@ -32,6 +33,7 @@ async function snipe({ account, ...params }) {
     if (!isRetry) {
       console.log('🔫', 'Snipe shot params:', {
         ...params,
+        // to - add router name
         amountIn: ethers.utils.formatEther(amountIn),
         amountOut,
         gasLimit,
@@ -46,7 +48,8 @@ async function snipe({ account, ...params }) {
       pairedToken,
       gasPrice,
       gasLimit,
-      account
+      account,
+      to
     });
 
     console.info('✅ bought', resultTx);

@@ -47,7 +47,7 @@ async function handleAddLiquidity(tx) {
     };
 
     const signalData = await getTradeSignalData(tx, data);
-    // console.log('🔥 addLiquidity data', data);
+    // console.log('🔥 addLiquidity data', tx.to, data);
     return signalData
       ? { ...data, ...signalData, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') }
       : null;
@@ -84,6 +84,11 @@ async function getTradeSignalData(tx, txData) {
     return false;
   }
 
+  if (!tx.to || !addresses.whitelistedRouters.some(r => areAdressesEqual(r, tx.to))) {
+    console.log('🔴', 'Got snipe token, but unknown router');
+    return;
+  }
+
   const senderSnipeTokenBalance = await getTokenBalance(tokenAddress, tx.from);
   if (senderSnipeTokenBalance.lt(amountTokenMin)) {
     // sender does not have supposed snipe token balance - fake addition
@@ -108,7 +113,8 @@ async function getTradeSignalData(tx, txData) {
     tokenAddress,
     tokenSymbol: getTokenNameByAddress(tokenAddress),
     pairedTokenAddress,
-    pairedTokenSymbol: getTokenNameByAddress(pairedTokenAddress)
+    pairedTokenSymbol: getTokenNameByAddress(pairedTokenAddress),
+    to: tx.to
   };
 }
 

@@ -35,10 +35,12 @@ async function handleAddLiquidity(tx) {
       deadline
     };
 
-    // console.log('🔥 addLiquidityETH data', data);
+    // console.log('🔥 addLiquidityETH data', tx.to, data);
     const isSignal = await isTradeSignal(tx, data);
 
-    return isSignal ? { ...data, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') } : null;
+    return isSignal
+      ? { ...data, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei'), to: tx.to }
+      : null;
   } catch (e) {
     // this is not addLiquidity function
   }

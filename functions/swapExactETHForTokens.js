@@ -5,9 +5,9 @@ const areAdressesEqual = require('../utils/areAdressesEqual');
 const getTokenNameByAddress = require('../utils/getTokenNameByAddress');
 const { getAccount } = require('../wallet');
 
-const getRouter = account => {
+const getRouter = (account, router) => {
   return new ethers.Contract(
-    addresses.router,
+    router || addresses.router,
     [
       'function swapExactETHForTokens(uint amountOutMin, address[] calldata path, address to, uint deadline) external payable returns (uint[] memory amounts)'
     ],
@@ -22,7 +22,8 @@ const swapExactETHForTokens = async ({
   token,
   pairedToken,
   gasPrice,
-  gasLimit = null
+  gasLimit = null,
+  to
 }) => {
   const WETHAmount = ethers.BigNumber.isBigNumber(amountIn)
     ? amountIn.toHexString()
@@ -35,7 +36,7 @@ const swapExactETHForTokens = async ({
   }
   path.push(token);
 
-  const tx = await getRouter(account).swapExactETHForTokens(
+  const tx = await getRouter(account, to).swapExactETHForTokens(
     ethers.utils.parseEther(amountOut),
     path,
     RECIPIENT_ADDRESS,

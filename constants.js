@@ -7,7 +7,7 @@ const USE_ZERG_ARMY = process.env.USE_ZERG_ARMY;
 
 const NATIVE_TOKENS_TRADE_AMOUNT = {
   BSC: '0.065', //BNB ~20$
-  MATIC: '0.1' //MATIC
+  MATIC: '0.5' //MATIC
 };
 
 const DEFAULT_GAS_PRICES = {
