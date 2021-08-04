@@ -12,7 +12,7 @@ const NATIVE_TOKENS_TRADE_AMOUNT = {
 
 const DEFAULT_GAS_PRICES = {
   BSC: '12',
-  MATIC: '2'
+  MATIC: '50'
 };
 
 // Snipe settings
