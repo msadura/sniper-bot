@@ -22,7 +22,7 @@ try {
 }
 
 // Testing - use only 1 account minions[1], minions[2]
-minions = [minions[0], minions[1]];
+minions = [minions[0], minions[1], minions[2]];
 
 function setLoadingPromise() {
   loadingPromise = new Promise((resolve, reject) => {
