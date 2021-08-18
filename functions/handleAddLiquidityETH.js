@@ -61,9 +61,14 @@ async function isTradeSignal(tx, txData) {
   const senderSnipeTokenBalance = await getTokenBalance(token, tx.from);
   if (senderSnipeTokenBalance.lt(amountTokenMin)) {
     // sender does not have supposed snipe token balance - fake addition
-    console.log('🔴', 'Sender does not have enough tokens - fake lp addition');
+    console.log('🔴', 'Sender does not have enough tokens - fake lp addition', `tx: ${tx.hash}`);
 
     return false;
+  }
+
+  if (!tx.to || !addresses.whitelistedRouters.some(r => areAdressesEqual(r, tx.to))) {
+    console.log('🔴', 'Got snipe token, but unknown router', `tx: ${tx.hash}`);
+    return;
   }
 
   //TODO - add checking min liqidity addition

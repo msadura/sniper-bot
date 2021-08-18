@@ -47,7 +47,7 @@ async function handleAddLiquidity(tx) {
     };
 
     const signalData = await getTradeSignalData(tx, data);
-    // console.log('🔥 addLiquidity data', tx.to, data);
+    // console.log('🔥 addLiquidity data', tx, data);
     return signalData
       ? { ...data, ...signalData, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') }
       : null;
@@ -85,7 +85,7 @@ async function getTradeSignalData(tx, txData) {
   }
 
   if (!tx.to || !addresses.whitelistedRouters.some(r => areAdressesEqual(r, tx.to))) {
-    console.log('🔴', 'Got snipe token, but unknown router');
+    console.log('🔴', 'Got snipe token, but unknown router', `tx: ${tx.hash}`);
     return;
   }
 
