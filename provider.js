@@ -4,8 +4,15 @@ const {
   MAINNET_API,
   MAINNET_PASS,
   MAINNET_USER,
-  MAINNET_API_PUBLIC
+  MAINNET_API_PUBLIC,
+  USE_TESTNET,
+  TESTNET_WEBSOCKET,
+  TESTNET_API
 } = require('./constants');
+
+const httpApiUrl = USE_TESTNET ? TESTNET_API : MAINNET_API;
+const httpApiPublic = USE_TESTNET ? TESTNET_API : MAINNET_API_PUBLIC;
+const wssApiUrl = USE_TESTNET ? TESTNET_WEBSOCKET : MAINNET_WEBSOCKET;
 
 let wsProvider = null;
 let apiProvider = null;
@@ -17,10 +24,10 @@ const connectProvider = async onConnect => {
   try {
     autoReconnect = true;
 
-    if (MAINNET_API && !apiProvider) {
-      let apiConnectInfo = MAINNET_API;
+    if (httpApiUrl && !apiProvider) {
+      let apiConnectInfo = httpApiUrl;
 
-      if (MAINNET_PASS && MAINNET_USER) {
+      if (MAINNET_PASS && MAINNET_USER && !USE_TESTNET) {
         apiConnectInfo = {
           url: MAINNET_API,
           user: MAINNET_USER,
@@ -32,15 +39,15 @@ const connectProvider = async onConnect => {
       await apiProvider.ready;
       console.log('🔥 Http provider info:', apiConnectInfo);
 
-      if (MAINNET_API_PUBLIC) {
-        apiPublicProvider = new ethers.providers.StaticJsonRpcProvider(MAINNET_API_PUBLIC);
-        console.log('🔥 Public http provider info:', MAINNET_API_PUBLIC);
+      if (httpApiPublic) {
+        apiPublicProvider = new ethers.providers.StaticJsonRpcProvider(httpApiPublic);
+        console.log('🔥 Public http provider info:', httpApiPublic);
         await apiPublicProvider.ready;
       }
     }
 
-    wsProvider = new ethers.providers.WebSocketProvider(MAINNET_WEBSOCKET);
-    console.log('🔥 Ws provider info:', MAINNET_WEBSOCKET);
+    wsProvider = new ethers.providers.WebSocketProvider(wssApiUrl);
+    console.log('🔥 Ws provider info:', wssApiUrl);
     keepAlive({ onConnect });
     await wsProvider.ready;
     retries = 0;

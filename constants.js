@@ -4,6 +4,7 @@ const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
 const USE_API_SERVER = process.env.USE_API_SERVER;
 const USE_ZERG_ARMY = process.env.USE_ZERG_ARMY;
+const USE_TESTNET = process.env.USE_TESTNET;
 
 const NATIVE_TOKENS_TRADE_AMOUNT = {
   BSC: '0.05', //BNB ~20$
@@ -27,7 +28,7 @@ const SNIPE_TOKENS_CONFIG = {
 };
 
 // Put names of trigger tokens here or in env variable
-let SNIPE_TOKEN_NAMES = ['SUB'];
+let SNIPE_TOKEN_NAMES = ['MAR1'];
 
 try {
   const snipeTokensEnv = process.env.SNIPE_TOKEN_NAMES.split(',').map(n => n.trim().toUpperCase());
@@ -44,6 +45,8 @@ const NATIVE_TOKEN = {
 
 const MAINNET_WEBSOCKET = process.env[`MAINNET_WEBSOCKET_${CHAIN}`];
 const MAINNET_API = process.env[`MAINNET_HTTP_${CHAIN}`];
+const TESTNET_WEBSOCKET = process.env[`TESTNET_WEBSOCKET_${CHAIN}`];
+const TESTNET_API = process.env[`TESTNET_HTTP_${CHAIN}`];
 const MAINNET_API_PUBLIC = process.env[`MAINNET_HTTP_PUBLIC_${CHAIN}`];
 const MAINNET_USER = process.env[`MAINNET_USER_${CHAIN}`];
 const MAINNET_PASS = process.env[`MAINNET_PASS_${CHAIN}`];
@@ -102,5 +105,8 @@ module.exports = {
   DEFAULT_GAS_PRICE,
   MAINNET_USER,
   MAINNET_PASS,
-  MAINNET_API_PUBLIC
+  MAINNET_API_PUBLIC,
+  USE_TESTNET,
+  TESTNET_WEBSOCKET,
+  TESTNET_API
 };

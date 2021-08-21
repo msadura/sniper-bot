@@ -47,7 +47,7 @@ async function handleAddLiquidity(tx) {
     };
 
     const signalData = await getTradeSignalData(tx, data);
-    // console.log('🔥 addLiquidity data', tx, data);
+    console.log('🔥 addLiquidity data', tx, data);
     return signalData
       ? { ...data, ...signalData, gasPrice: ethers.utils.formatUnits(tx.gasPrice, 'gwei') }
       : null;
