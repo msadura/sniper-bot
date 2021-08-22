@@ -86,7 +86,7 @@ async function getTradeSignalData(tx, txData) {
 
   if (!tx.to || !addresses.whitelistedRouters.some(r => areAdressesEqual(r, tx.to))) {
     console.log('🔴', 'Got snipe token, but unknown router', `tx: ${tx.hash}`);
-    return;
+    // return;
   }
 
   const senderSnipeTokenBalance = await getTokenBalance(tokenAddress, tx.from);

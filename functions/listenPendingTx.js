@@ -1,5 +1,5 @@
 const { getProvider } = require('../provider');
-const { areAddressesEqual } = require('../utils/areAdressesEqual');
+const areAddressesEqual = require('../utils/areAdressesEqual');
 
 let good = 0;
 let bad = 0;
@@ -14,7 +14,7 @@ function listenPendingTx(callback) {
       const transaction = await getProvider(
         usePublicApiForDetails ? 'public' : 'http'
       ).getTransaction(tx);
-      console.log('🔥', transaction);
+
       if (!transaction) {
         bad++;
         if (logStats) {
@@ -26,9 +26,9 @@ function listenPendingTx(callback) {
           console.log('🔫', 'good tx', good, 'null tx', bad);
         }
       }
-      console.log('🔥', transaction.from);
+
       if (areAddressesEqual('0x60c5435863e559d432e756d3f8b74466f7f4432b', transaction.from)) {
-        console.log('🔥my stuff', transaction);
+        console.log('🔥my tx detected');
       }
 
       callback && callback(transaction);

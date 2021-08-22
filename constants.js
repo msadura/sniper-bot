@@ -2,9 +2,9 @@ const CHAIN = process.env.USE_CHAIN || 'BSC';
 const SWAP = process.env.USE_SWAP || 'SUSHI';
 const RECIPIENT_ADDRESS = process.env.RECIPIENT_ADDRESS;
 const MNEMONIC = process.env.MNEMONIC;
-const USE_API_SERVER = process.env.USE_API_SERVER;
-const USE_ZERG_ARMY = process.env.USE_ZERG_ARMY;
-const USE_TESTNET = process.env.USE_TESTNET;
+const USE_API_SERVER = process.env.USE_API_SERVER === 'true';
+const USE_ZERG_ARMY = process.env.USE_ZERG_ARMY === 'true';
+const USE_TESTNET = process.env.USE_TESTNET === 'true';
 
 const NATIVE_TOKENS_TRADE_AMOUNT = {
   BSC: '0.05', //BNB ~20$
@@ -58,6 +58,7 @@ console.log('ℹ️  SNIPE_TOKEN_NAMES: ', SNIPE_TOKEN_NAMES);
 console.log('ℹ️  USE_API_SERVER: ', USE_API_SERVER);
 console.log('ℹ️  CHAIN: ', CHAIN);
 console.log('ℹ️  SWAP: ', SWAP);
+console.log('ℹ️  USE_ZERG_ARMY: ', USE_ZERG_ARMY);
 
 if (!RECIPIENT_ADDRESS) {
   throw 'Set RECIPIENT_ADDRESS env variable!';
